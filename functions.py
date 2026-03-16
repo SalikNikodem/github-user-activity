@@ -17,9 +17,19 @@ def github_activity(user, timeout=5):
 
                 match event_type:
                     case "PushEvent":
-                        print("asdas")
+                        print(f"Pushed changes to {repository_name}")
 
+                    case "IssuesEvent":
+                        issue = event.get("payload", {}).get("action")
+                        print(f"{issue} a new issue in {repository_name}")
 
+                    case "WatchEvent":
+                        print(f"Starred {repository_name}")
+
+                    case "CreateEvent":
+                        ref_type = event.get("payload", {}).get("ref_type")
+                        print(f"Created a new {ref_type} in {repository_name}")
+        return ''
 
     except HTTPError as e:
         code = e.code
@@ -30,4 +40,3 @@ def github_activity(user, timeout=5):
         return f'URLError {e.reason}'
     except Exception as e:
         return f'Error: {e}'
-
