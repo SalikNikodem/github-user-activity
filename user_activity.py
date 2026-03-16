@@ -5,4 +5,4 @@ if __name__ == "__main__":
         print("Run: python user_activity.py [user]")
         sys.exit(1)
 
-    github_activity(sys.argv[1])
+    print(github_activity(sys.argv[1]))
