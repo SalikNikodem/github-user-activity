@@ -4,6 +4,10 @@ from urllib.error import HTTPError, URLError
 from datetime import datetime
 import time
 from pathlib import Path
+
+events = ["PushEvent", "IssuesEvent", "WatchEvent", "CreateEvent", "DeleteEvent", "ForkEvent", "PublicEvent","DiscussionEvent"]
+
+
 def github_activity(user, key = None,timeout=5):
     cache_f = Path(f"{user}_cache.json")
     found = False
@@ -50,6 +54,18 @@ def match(events, key, found, user):
         if key and key != event_type:
             continue
         match event_type:
+            case "DiscussionEvent":
+                action = event.get("payload", {}).get("action")
+                print(f"{date}: {action} Discussion in {repository_name}")
+            case "PublicEvent":
+                print(f"{date}: {repository_name} is now public")
+            case "ForkEvent":
+                action = event.get("payload", {}).get("action")
+                print(f"{date}: {action} in {repository_name}")
+            case "DeleteEvent":
+                ref_type = event.get("payload", {}).get("ref_type")
+                print(f"{date}: Deleted {ref_type} in {repository_name} ")
+                found = True
             case "PushEvent":
                 print(f"{date}: Pushed changes to {repository_name}")
                 found = True
@@ -57,7 +73,6 @@ def match(events, key, found, user):
                 issue = event.get("payload", {}).get("action")
                 print(f"{date}: {issue} a new issue in {repository_name}")
                 found = True
-
             case "WatchEvent":
                 print(f"{date}: Starred {repository_name}")
                 found = True

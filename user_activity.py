@@ -1,11 +1,10 @@
-from functions import github_activity
+from functions import github_activity, events
 import sys
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Run: python user_activity.py [user] [event](optional)")
         sys.exit(1)
     user = sys.argv[1]
-    events = ["PushEvent", "IssuesEvent", "WatchEvent", "CreateEvent"]
 
     key = sys.argv[2] if len(sys.argv) > 2 else None
 
